@@ -10,7 +10,7 @@
       </a>
     </h3>
 
-    <span class="catalog__price"> {{ product.price }} Br </span>
+    <span class="catalog__price"> {{ product.price | numberFormat}} Br </span>
 
     <ul class="colors colors--black">
       <li class="colors__item">
@@ -51,19 +51,21 @@
 </template>
 
 <script>
-import eventBus from "@/eventBus";
+  import gotoPage from "@/helpers/gotoPage";
+  import numberFormat from "@/helpers/numberFormat";
 
-export default {
-  data() {
-    return {
-      color:'#73B6EA',
-    }
-  },
-  methods: {
-    gotoPage(pageName, pageParams) {
-      eventBus.$emit('gotoPage', pageName, pageParams);
-    }
-  },
-  props: ["product"],
-};
+  export default {
+    data() {
+      return {
+        color:'#73B6EA',
+      }
+    },
+    filters: {
+      numberFormat
+    },
+    methods: {
+      gotoPage
+    },
+    props: ["product"],
+  };
 </script>

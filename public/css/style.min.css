@@ -1207,7 +1207,8 @@ a {
     grid-gap: 55px 30px;
     -webkit-box-align: start;
     -ms-flex-align: start;
-    align-items: flex-start
+    /* align-items: flex-start; */
+    align-items: end;
 }
 
 .item__code {
