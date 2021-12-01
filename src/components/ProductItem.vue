@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <a class="catalog__pic" href="#">
-      <img :src="product.image" :alt="product.title" />
+  <li class="catalog_item">
+    <a class="catalog__pic" href="#" @click.prevent="$emit ('gotoPage', 'product', {id: product.id})">
+      <img :src="product.image" :alt="product.title"/>
     </a>
 
     <h3 class="catalog__title">
@@ -47,7 +47,7 @@
         </label>
       </li>
     </ul>
-  </div>
+  </li>
 </template>
 
 <script>
