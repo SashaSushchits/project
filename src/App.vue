@@ -4,13 +4,14 @@
     <ProductPage v-if="currentPage === 'product'" />
     <NotFoudPage v-else/>
   </section> -->
-  <component :is="currentPageComponent" :page-params="currentPageParams" @gotoPage="(pageName, pageParams) => gotoPage(pageName, pageParams)"/>
+  <component :is="currentPageComponent" :page-params="currentPageParams" />
 </template>
 
 <script>
 import MainPage from "./pages/MainPage.vue";
 import ProductPage from "./pages/ProductPage.vue";
 import NotFoudPage from "./pages/NotFoundPage.vue";
+import eventBus from "./eventBus";
 
 const routes = {
   main: 'MainPage',
@@ -37,6 +38,9 @@ export default {
       return routes[this.currentPage] || 'NotFoundPage';  //what this??!
     }
   },
+  created() {
+    eventBus.$on('gotoPage', (pageName, pageParams) => this.gotoPage(pageName, pageParams))
+  }
 };
 </script>
 
