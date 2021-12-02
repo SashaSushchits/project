@@ -36,11 +36,11 @@ export default {
   computed: {
     currentPageComponent() {
       return routes[this.currentPage] || 'NotFoundPage';  //what this??!
-    }
+    },
+    created() {
+      eventBus.$on('gotoPage', (pageName, pageParams) => this.gotoPage(pageName, pageParams))
+    },
   },
-  created() {
-    eventBus.$on('gotoPage', (pageName, pageParams) => this.gotoPage(pageName, pageParams))
-  }
 };
 </script>
 

@@ -18,7 +18,7 @@
     <li class="pagination__item">
       <a
         class="pagination__link pagination__link--arrow"
-        :class="{'pagination__link--disabled': page === 3}"
+        :class="{'pagination__link--disabled': page === pages}"
         aria-label="Следующая страница"
         @click.prevent="paginate(page+1)">
         <svg width="8" height="14" fill="currentColor">

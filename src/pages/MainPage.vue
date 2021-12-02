@@ -10,6 +10,7 @@
         :price-from.sync="filterPriceFrom"
         :price-to.sync="filterPriceTo"
         :category-id.sync="filterCategoryId"
+        :color.sync="filterColor"
       />
 
       <section class="catalog">
@@ -38,14 +39,15 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
+      filterColor: '',
       page: 1,
       productsPerPage: 9, //на странице
-      // products: products, // можно просто products
+      allProducts: products, // products:products можно просто products
     };
   },
   computed: {
     filteredProducts() {
-      let filteredProducts = products;
+      let filteredProducts = this.allProducts;
       if (this.filterPriceFrom > 0) {
         filteredProducts = filteredProducts.filter(
           (product) => product.price > this.filterPriceFrom
@@ -61,6 +63,11 @@ export default {
           (product) => product.categoryId === this.filterCategoryId
         );
       }
+      if (this.filterColor) {
+        filteredProducts = filteredProducts.filter(
+          (product) => product.color === this.filterColor
+        );
+      }
       return filteredProducts;
     },
     products() {
@@ -73,4 +80,3 @@ export default {
   },
 };
 </script>
-
