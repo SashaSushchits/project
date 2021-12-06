@@ -2,7 +2,7 @@
   <main class="content container">
     <div class="content__top content__top--catalog">
       <h1 class="content__title">Каталог</h1>
-      <span class="content__info"> 152 товара </span>
+      <span class="content__info"> Количество товара: {{ allProducts.length }}</span>
     </div>
 
     <div class="content__catalog">
@@ -10,7 +10,7 @@
         :price-from.sync="filterPriceFrom"
         :price-to.sync="filterPriceTo"
         :category-id.sync="filterCategoryId"
-        :color.sync="filterColor"
+        :filter-color.sync="filterColor"
       />
 
       <section class="catalog">
@@ -46,29 +46,48 @@ export default {
     };
   },
   computed: {
+    // filteredProducts() {
+    //   let filteredProducts = this.allProducts;
+    //   if (this.filterPriceFrom > 0) {
+    //     filteredProducts = filteredProducts.filter(
+    //       (product) => product.price > this.filterPriceFrom
+    //     );
+    //   }
+    //   if (this.filterPriceTo > 0) {
+    //     filteredProducts = filteredProducts.filter(
+    //       (product) => product.price < this.filterPriceTo
+    //     );
+    //   }
+    //   if (this.filterCategoryId) {
+    //     filteredProducts = filteredProducts.filter(
+    //       (product) => product.categoryId === this.filterCategoryId
+    //     );
+    //   }
+    //   if (this.filterColor) {
+    //     console.log(this.filterColor)
+    //     filteredProducts = filteredProducts.filter(
+    //       (product) => product.color.includes(this.filterColor)
+    //     );
+    //   }
+    //   return filteredProducts;
+    // },
     filteredProducts() {
-      let filteredProducts = this.allProducts;
-      if (this.filterPriceFrom > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price > this.filterPriceFrom
-        );
-      }
-      if (this.filterPriceTo > 0) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.price < this.filterPriceTo
-        );
-      }
-      if (this.filterCategoryId) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.categoryId === this.filterCategoryId
-        );
-      }
-      if (this.filterColor) {
-        filteredProducts = filteredProducts.filter(
-          (product) => product.color === this.filterColor
-        );
-      }
-      return filteredProducts;
+      return this.allProducts.filter((product) => {
+        if (this.filterPriceFrom > 0 && product.price < this.filterPriceFrom) {
+          return false
+        };
+        if (this.filterPriceTo > 0 && product.price > this.filterPriceTo) {
+          return false
+        };
+        if (this.filterCategoryId && product.categoryId !== this.filterCategoryId) {
+          return false
+        };
+        if (this.filterColor && !product.color.includes(this.filterColor)) {
+          console.log(this.filterColor)
+          return false
+        };
+        return true
+      });
     },
     products() {
       const offset = (this.page - 1) * this.productsPerPage;

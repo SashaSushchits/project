@@ -4,7 +4,7 @@ export default [{
         title: 'Canyon Speedmax CF 7.0 XS 2020',
         price: 1000,
         image: '/image/Canyon Speedmax CF 7.0 XS 2020.jpeg',
-        color: "#000",
+        color: ["#000"],
     },
     {
         id: 2,
@@ -12,7 +12,7 @@ export default [{
         title: 'Cube Aim Race 29 L 2021',
         price: 2000,
         image: '/image/Cube Aim Race 29 L 2021.jpeg',
-        color: "#000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 3,
@@ -20,7 +20,7 @@ export default [{
         title: 'Krakken Barbossa 29 2021',
         price: 3000,
         image: '/image/Krakken Barbossa 29.jpeg',
-        color: "#000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 4,
@@ -28,7 +28,7 @@ export default [{
         title: 'Foxter Sunline 2020',
         price: 1550,
         image: '/image/Foxter Sunline 2020.jpeg',
-        color: "#000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 5,
@@ -36,7 +36,7 @@ export default [{
         title: 'LTD Rocco 753 2021',
         price: 2550,
         image: '/image/LTD Rocco 753 27.5 2021.jpeg',
-        color: "#000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 6,
@@ -44,7 +44,7 @@ export default [{
         title: 'LTD Rocco 956 29 2021',
         price: 3700,
         image: '/image/LTD Rocco 956 29 2021.jpeg',
-        color: "#8BE000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 7,
@@ -52,7 +52,7 @@ export default [{
         title: 'Merida Silex 200 M 2021',
         price: 1800,
         image: '/image/Merida Silex 200 M 2021.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 8,
@@ -60,7 +60,7 @@ export default [{
         title: 'Racer Tempo 24 2020',
         price: 2300,
         image: '/image/Racer Tempo 24 2020.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 9,
@@ -68,7 +68,7 @@ export default [{
         title: 'Stels Navigator 400 MD 24 F010 2020',
         price: 3400,
         image: '/image/Stels Navigator 400 MD 24 F010 2020.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 10,
@@ -76,7 +76,7 @@ export default [{
         title: 'LTD Rocco 960 29 2021',
         price: 1600,
         image: '/image/LTD Rocco 960 29 2021.jpeg',
-        color: "#8BE000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 11,
@@ -84,7 +84,7 @@ export default [{
         title: 'TD Crossfire 840 2021',
         price: 2750,
         image: '/image/TD Crossfire 840 2021.jpeg',
-        color: "#8BE000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 12,
@@ -92,7 +92,7 @@ export default [{
         title: 'Trek Domane AL 2',
         price: 3400,
         image: '/image/Trek Domane AL 2.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 13,
@@ -100,7 +100,7 @@ export default [{
         title: 'AIST Amsterdam 2.0',
         price: 700,
         image: '/image/AIST Amsterdam 2.0 (black) G.jpeg',
-        color: "#000"
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 14,
@@ -108,7 +108,7 @@ export default [{
         title: 'AIST Avenue 2021',
         price: 460,
         image: '/image/AIST Avenue 2021 (white) G.jpeg',
-        color: "#FFF",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF"],
     },
     {
         id: 15,
@@ -116,7 +116,7 @@ export default [{
         title: 'AIST Stitch 16',
         price: 620,
         image: '/image/AIST Stitch 16 D.jpeg',
-        color: "#8BE000",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 16,
@@ -124,7 +124,7 @@ export default [{
         title: 'AIST Tracker 1.0',
         price: 510,
         image: '/image/AIST Tracker 1.0 G.jpeg',
-        color: "#FF6B00",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 17,
@@ -132,7 +132,7 @@ export default [{
         title: 'Altair City 28 low 2021',
         price: 740,
         image: '/image/Altair City 28 low 2021 G.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 18,
@@ -140,7 +140,7 @@ export default [{
         title: 'Delta Prestige 16',
         price: 320,
         image: '/image/Delta Prestige 16 D.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 19,
@@ -148,7 +148,7 @@ export default [{
         title: 'Favorit Biker 18',
         price: 470,
         image: '/image/Favorit Biker 18 D.jpeg',
-        color: "#FF6B00",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 20,
@@ -156,7 +156,7 @@ export default [{
         title: 'Forward Evia Air 26',
         price: 730,
         image: '/image/Forward Evia Air 26 G.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 21,
@@ -164,7 +164,7 @@ export default [{
         title: 'JetCat Race Pro 16',
         price: 660,
         image: '/image/JetCat Race Pro 16 D.jpeg',
-        color: "#FF6B00",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 22,
@@ -172,7 +172,7 @@ export default [{
         title: 'Lorelli A28',
         price: 550,
         image: '/image/Lorelli A28 D.jpeg',
-        color: "#FF6B00",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 23,
@@ -180,7 +180,7 @@ export default [{
         title: 'Merida Matts 7.10',
         price: 600,
         image: '/image/Merida Matts 7.10 G.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 24,
@@ -188,7 +188,7 @@ export default [{
         title: 'Onro ON161BY',
         price: 400,
         image: '/image/Onro ON161BY D.jpeg',
-        color: "#FF6B00",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 25,
@@ -196,7 +196,7 @@ export default [{
         title: 'Shulz Bubble 14 Race 2021',
         price: 490,
         image: '/image/Shulz Bubble 14 Race 2021 D.jpeg',
-        color: "#73B6EA",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 26,
@@ -204,7 +204,7 @@ export default [{
         title: 'Stels Jet 16 Z010',
         price: 200,
         image: '/image/Stels Jet 16 Z010 D.jpeg',
-        color: "#FF6B00",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
     {
         id: 27,
@@ -212,6 +212,6 @@ export default [{
         title: 'Stels Pilot 250 Gent 20 V020',
         price: 720,
         image: '/image/Stels Pilot 250 Gent 20 V020 D.jpeg',
-        color: "#FF6B00",
+        color: ["#73B6EA", "#8BE000", "#FF6B00", "#FFF", "#000"],
     },
 ]

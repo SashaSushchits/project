@@ -10,7 +10,7 @@
 <script>
 import MainPage from "./pages/MainPage.vue";
 import ProductPage from "./pages/ProductPage.vue";
-import NotFoudPage from "./pages/NotFoundPage.vue";
+import NotFoundPage from "./pages/NotFoundPage.vue";
 import eventBus from "./eventBus";
 
 const routes = {
@@ -20,7 +20,7 @@ const routes = {
 
 export default {
   name: "App",
-  components: { MainPage, ProductPage, NotFoudPage },
+  components: { MainPage, ProductPage, NotFoundPage },
   data() {
     return {
       currentPage: 'main',
@@ -35,12 +35,13 @@ export default {
   },
   computed: {
     currentPageComponent() {
-      return routes[this.currentPage] || 'NotFoundPage';  //what this??!
-    },
-    created() {
-      eventBus.$on('gotoPage', (pageName, pageParams) => this.gotoPage(pageName, pageParams))
+      return routes[this.currentPage]||'NotFoundPage';  //what this??!
     },
   },
+
+  created() { //хук цикла
+      eventBus.$on('gotoPage', (pageName, pageParams) => this.gotoPage(pageName, pageParams))
+    }
 };
 </script>
 
