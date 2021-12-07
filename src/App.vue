@@ -1,15 +1,16 @@
 <template>
-  <!-- <section>
-    <MainPage v-if="currentPage === 'main'" />
-    <ProductPage v-if="currentPage === 'product'" />
-    <NotFoudPage v-else/>
-  </section> -->
-  <router-view/>
+  <div>
+    <Header/>
+    <router-view />
+     <Footer/>
+  </div>
 </template>
 
 <script>
-  export default {
-    
-  };
+import Header from "@/components/Header.vue";
+import Footer from "@/components/Footer.vue";
+export default {
+  components: { Header, Footer },
+};
 </script>
 
