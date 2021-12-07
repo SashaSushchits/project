@@ -35,7 +35,7 @@
                 class="colors__radio sr-only"
                 type="radio"
                 name="color"
-                :value = "color"
+                :value = color
                 checked=""
               />
               <span class="colors__value" :style="{backgroundColor: color}"></span>
