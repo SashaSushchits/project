@@ -31,6 +31,7 @@ import products from "./../data/products";
 import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue"; // @ - ссылается на апку SRC
 import ProductFilter from "@/components/ProductFilter.vue";
+// import eventBus from '@/eventBus'
 
 export default {
   components: { ProductList, BasePagination, ProductFilter },
@@ -45,6 +46,9 @@ export default {
       allProducts: products, // products:products можно просто products
     };
   },
+  // created() {
+  //   eventBus.$on('gotoPage', (pageName, pageParams) => {this.page = pageParams.page})
+  // }, // eventBus должен принимать и обрабатывать
   computed: {
     // filteredProducts() {
     //   let filteredProducts = this.allProducts;
@@ -97,5 +101,18 @@ export default {
       return this.filteredProducts.length;
     },
   },
+  watch: {
+    filteredProducts() {
+      this.page = 1
+    }
+  //   filterPriceFrom() {
+  //     this.page = 1
+  //   } ,
+  //   filterPriceTo: 0,
+  //   filterCategoryId: 0,
+  //   filterColor() {
+  //     this.page = 1
+  //   },
+  }
 };
 </script>

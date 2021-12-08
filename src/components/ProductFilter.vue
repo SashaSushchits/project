@@ -148,6 +148,7 @@
 <script>
 import categories from "../data/categories";
 import products from "../data/products";
+import gotoPage from "@/helpers/gotoPage"
 export default {
   data() {
     return {
@@ -188,6 +189,7 @@ export default {
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
       this.$emit('update:filterColor', this.currentColor);
+      // gotoPage('main', {page:1})
     },
     reset(){
       this.$emit('update:priceFrom', 0);
