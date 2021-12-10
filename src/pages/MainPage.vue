@@ -2,7 +2,7 @@
   <main class="content container">
     <div class="content__top content__top--catalog">
       <h1 class="content__title">Каталог</h1>
-      <span class="content__info"> Количество товара: {{ allProducts.length }}</span>
+      <span class="content__info"> Количество товара: {{  }}</span> <!-- общее количество? -->
     </div>
 
     <div class="content__catalog">
@@ -32,6 +32,7 @@ import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue"; // @ - ссылается на апку SRC
 import ProductFilter from "@/components/ProductFilter.vue";
 // import eventBus from '@/eventBus'
+import axios from "axios";
 
 export default {
   components: { ProductList, BasePagination, ProductFilter },
@@ -42,8 +43,10 @@ export default {
       filterCategoryId: 0,
       filterColor: '',
       page: 1,
-      productsPerPage: 9, //на странице
+      productsPerPage: 3, //на странице
       allProducts: products, // products:products можно просто products
+    
+      productsData: null
     };
   },
   // created() {
@@ -94,14 +97,34 @@ export default {
       });
     },
     products() {
-      const offset = (this.page - 1) * this.productsPerPage;
-      return this.filteredProducts.slice(offset, offset + this.productsPerPage);
+      return this.productsData? this.productsData.items.map(product => {
+        return {
+          ...product,
+          image: product.image.file.url
+        }
+      }) : [];
+      // const offset = (this.page - 1) * this.productsPerPage;
+      // return this.filteredProducts.slice(offset, offset + this.productsPerPage);
     },
     countProducts() {
-      return this.filteredProducts.length;
+      return this.productsData? this.productsData.pagination.total : 0;
+      // return this.filteredProducts.length;
     },
   },
+  methods: {
+    loadProducts() {
+      axios.get(`https://vue-study.skillbox.cc/api/products?page=${this.page}&limit=${this.productsPerPage}`)
+        .then(response => this.productsData = response.data)
+    }
+  },
+  created(){
+    this.loadProducts();
+  },
+
   watch: {
+    page(){
+      this.loadProducts();
+    },
     filteredProducts() {
       this.page = 1
     }
