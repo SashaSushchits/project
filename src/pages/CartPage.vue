@@ -11,7 +11,7 @@
       </ul>
 
       <h1 class="content__title">Корзина</h1>
-      <span class="content__info">Количество товаров: {{ products.length }} шт.</span>
+      <span class="content__info">Количество товаров: {{ totalProducts }} шт.</span>
     </div>
 
     <section class="cart">
@@ -50,7 +50,7 @@ export default {
   computed: {
     // ...mapGetters(['cartDetailProducts']),
    
-   ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice'}), //название будущего вычисляемого свойства и геттер(который хотим проксировать)
+   ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice', totalProducts:'totalProducts'}), //название будущего вычисляемого свойства и геттер(который хотим проксировать)
    
    // products(){
     //   // return this.$store.getters.cartDetailProducts;

@@ -130,13 +130,13 @@
 
             <div class="item__row">
               <div class="form__counter">
-                <button :class="{'pagination__link--disabled': productAmount === 1}" type="button" aria-label="Убрать один товар" v-if="productAmount !== 0" @click.prevent="productAmount--">
+                <button :class="{'pagination__link--disabled': productAmount === 1}" type="button" aria-label="Убрать один товар" @click.prevent="productAmount--">
                   <svg width="12" height="12" fill="currentColor">
                     <use xlink:href="#icon-minus"></use>
                   </svg>
                 </button>
 
-                <input type="text" v-model.number="productAmount" />
+                <input type="text" v-model.number="productAmount"/>
 
                 <button type="button" aria-label="Добавить один товар" @click.prevent="productAmount++">
                   <svg width="12" height="12" fill="currentColor">
@@ -241,10 +241,15 @@
         methods: {
             gotoPage,
             addToCart(){
-              this.$store.commit(
-                'addProductToCart',
-                {productId: this.product.id, amount: this.productAmount}
-              )
+              if(this.productAmount < 1) {
+                this.productAmount = 1;
+                alert('Вы ввели не корректное значение, пожалуйста, введите количество товара равное одному и больше')
+              } else {
+                this.$store.commit(
+                  'addProductToCart',
+                  {productId: this.product.id, amount: this.productAmount}
+                )
+              }
             }
         }
     }

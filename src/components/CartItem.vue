@@ -51,10 +51,20 @@ export default {
   computed: {
       amount: {
           get(){
+            if (this.item.amount < 1) {
+              this.item.amount = 1;
+              alert('Вы ввели не корректное значение, пожалуйста, введите количество товара равное одному и больше')
+            } else {
               return this.item.amount;
+              }
           },
           set(value){
+            if (value < 1) {
+              value = 1;
+              alert('Вы ввели не корректное значение, пожалуйста, введите количество товара равное одному и больше')
+            } else {
               this.$store.commit('updateCartProductAmount', {productId: this.item.productId, amount: value})
+              }
           }
       }
   },
