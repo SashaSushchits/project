@@ -28,17 +28,17 @@
       <fieldset class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
-          <li class="colors__item" v-for="color in colors" :key="color">
+          <li class="colors__item" v-for="color in colors" :key="color.id">
             <label class="colors__label">
               <input
                 v-model="currentColor"
                 class="colors__radio sr-only"
                 type="radio"
                 name="color"
-                :value = color
+                :value = color.id 
                 checked=""
               />
-              <span class="colors__value" :style="{backgroundColor: color}"></span>
+              <span class="colors__value" :style="{backgroundColor: color.code}"></span>
             </label>
           </li>
         </ul>
@@ -146,16 +146,21 @@
 </template>
 
 <script>
-import categories from "../data/categories";
+// import categories from "../data/categories";
 import products from "../data/products";
-import gotoPage from "@/helpers/gotoPage"
+import gotoPage from "@/helpers/gotoPage";
+import axios from 'axios';
+import {API_BASE_URL} from '@/config'
 export default {
   data() {
     return {
       currentPriceFrom: 0,
       currentPriceTo: 0,
       currentCategoryId: 0,
-      currentColor:'',
+      currentColor:'', // передаем не цвет, а id цвета, и проверяем, есть ли это цвет в товаре
+
+      categoriesData: null,
+      colorsData: null
     }
   },
   props:['priceFrom', 'priceTo', 'categoryId', 'filterColor'],
@@ -169,18 +174,20 @@ export default {
     //   }
     // },
     categories() {
-      return categories
+      return this.categoriesData ? this.categoriesData.items : [];
     },
     colors() {
-      const uniqueColors = [];
-      products.forEach(item => {
-        item.color.forEach(currentColor => {
-          if(!uniqueColors.includes(currentColor)) {
-            uniqueColors.push(currentColor)
-          }
-        })
-      })
-      return uniqueColors
+      return this.colorsData ? this.colorsData.items : [];
+
+      // const uniqueColors = [];
+      // products.forEach(item => {
+      //   item.color.forEach(currentColor => {
+      //     if(!uniqueColors.includes(currentColor)) {
+      //       uniqueColors.push(currentColor)
+      //     }
+      //   })
+      // })
+      // return uniqueColors
     },
   },
   methods: {
@@ -197,6 +204,18 @@ export default {
       this.$emit('update:categoryId', 0);
       this.$emit('update:filterColor', '');
     },
+    loadCategories(){
+      axios.get(API_BASE_URL+'/api/productCategories')
+        .then(response => this.categoriesData = response.data)
+    },
+    loadColors(){
+      axios.get(API_BASE_URL+'/api/colors')
+        .then(response => this.colorsData = response.data)
+    },
+  },
+  created() {
+    this.loadCategories(),
+    this.loadColors()
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <main class="content container">
     <div class="content__top content__top--catalog">
       <h1 class="content__title">Каталог</h1>
-      <span class="content__info"> Количество товара: {{  }}</span> <!-- общее количество? -->
+      <span class="content__info"> Количество товара: {{ countProducts }}</span>
     </div>
 
     <div class="content__catalog">
@@ -14,7 +14,7 @@
       />
 
       <section class="catalog">
-        <ProductList :products="products"/>
+        <ProductList :products="products" />
 
         <BasePagination
           v-model="page"
@@ -27,10 +27,11 @@
 </template>
 
 <script>
-import products from "./../data/products";
+// import products from "./../data/products";
 import ProductList from "@/components/ProductList.vue";
 import BasePagination from "@/components/BasePagination.vue"; // @ - ссылается на апку SRC
 import ProductFilter from "@/components/ProductFilter.vue";
+import {API_BASE_URL} from '@/config'
 // import eventBus from '@/eventBus'
 import axios from "axios";
 
@@ -41,12 +42,12 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
-      filterColor: '',
+      filterColor: "",
       page: 1,
       productsPerPage: 3, //на странице
-      allProducts: products, // products:products можно просто products
-    
-      productsData: null
+      // allProducts: products, // products:products можно просто products
+
+      productsData: null,
     };
   },
   // created() {
@@ -78,64 +79,99 @@ export default {
     //   }
     //   return filteredProducts;
     // },
-    filteredProducts() {
-      return this.allProducts.filter((product) => {
-        if (this.filterPriceFrom > 0 && product.price < this.filterPriceFrom) {
-          return false
-        };
-        if (this.filterPriceTo > 0 && product.price > this.filterPriceTo) {
-          return false
-        };
-        if (this.filterCategoryId && product.categoryId !== this.filterCategoryId) {
-          return false
-        };
-        if (this.filterColor && !product.color.includes(this.filterColor)) {
-          console.log(this.filterColor)
-          return false
-        };
-        return true
-      });
-    },
+    // filteredProducts() {
+    //   return this.allProducts.filter((product) => {
+    //     if (this.filterPriceFrom > 0 && product.price < this.filterPriceFrom) {
+    //       return false
+    //     };
+    //     if (this.filterPriceTo > 0 && product.price > this.filterPriceTo) {
+    //       return false
+    //     };
+    //     if (this.filterCategoryId && product.categoryId !== this.filterCategoryId) {
+    //       return false
+    //     };
+    //     if (this.filterColor && !product.color.includes(this.filterColor)) {
+    //       console.log(this.filterColor)
+    //       return false
+    //     };
+    //     return true
+    //   });
+    // },
     products() {
-      return this.productsData? this.productsData.items.map(product => {
-        return {
-          ...product,
-          image: product.image.file.url
-        }
-      }) : [];
+      return this.productsData
+        ? this.productsData.items.map((product) => {
+            return {
+              ...product,
+              image: product.image.file.url,
+              // color: product.colors.code, 
+            };
+          })
+        : [];
       // const offset = (this.page - 1) * this.productsPerPage;
       // return this.filteredProducts.slice(offset, offset + this.productsPerPage);
     },
     countProducts() {
-      return this.productsData? this.productsData.pagination.total : 0;
+      return this.productsData ? this.productsData.pagination.total : 0;
       // return this.filteredProducts.length;
     },
   },
   methods: {
     loadProducts() {
-      axios.get(`https://vue-study.skillbox.cc/api/products?page=${this.page}&limit=${this.productsPerPage}`)
-        .then(response => this.productsData = response.data)
-    }
+      clearTimeout(this.loadProductsTimer);
+    this.loadProductsTimer = setTimeout(() => {
+      axios
+        .get(
+          API_BASE_URL+'/api/products',
+          {
+            params: {
+              page: this.page,
+              limit: this.productsPerPage,
+              categoryId: this.filterCategoryId,
+              minPrice: this.filterPriceFrom,
+              maxPrice: this.filterPriceTo,
+              colorId: this.filterColor
+            },
+          }
+        )
+        .then((response) => (this.productsData = response.data));
+    }, 0)
+    },
   },
-  created(){
+  created() {
     this.loadProducts();
   },
 
   watch: {
-    page(){
+    page() {
       this.loadProducts();
     },
+    filterPriceFrom() {
+      this.loadProducts();
+      this.page = 1;
+    },
+    filterPriceTo() {
+      this.loadProducts();
+      this.page = 1;
+    },
+    filterCategoryId() {
+      this.loadProducts();
+      this.page = 1;
+    },
+    filterColor() {
+      this.loadProducts();
+      this.page = 1;
+    },
     filteredProducts() {
-      this.page = 1
-    }
-  //   filterPriceFrom() {
-  //     this.page = 1
-  //   } ,
-  //   filterPriceTo: 0,
-  //   filterCategoryId: 0,
-  //   filterColor() {
-  //     this.page = 1
-  //   },
-  }
+      this.page = 1;
+    },
+    //   filterPriceFrom() {
+    //     this.page = 1
+    //   } ,
+    //   filterPriceTo: 0,
+    //   filterCategoryId: 0,
+    //   filterColor() {
+    //     this.page = 1
+    //   },
+  },
 };
 </script>
