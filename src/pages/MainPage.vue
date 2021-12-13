@@ -14,6 +14,14 @@
       />
 
       <section class="catalog">
+        <div v-if="productsLoading">
+          <h2>Выполняется загрузка</h2>
+        </div>
+
+        <div v-if="productsLoadingFailed">
+          <h2>Произошла ошибка при загрузке товаров</h2> <button @click="loadProducts">Попробовать ещё раз</button>
+        </div>
+
         <ProductList :products="products" />
 
         <BasePagination
@@ -48,7 +56,10 @@ export default {
       // allProducts: products, // products:products можно просто products
 
       productsData: null,
-    };
+
+      productsLoading: false,
+      productsLoadingFailed: false
+    }
   },
   // created() {
   //   eventBus.$on('gotoPage', (pageName, pageParams) => {this.page = pageParams.page})
@@ -117,24 +128,28 @@ export default {
   },
   methods: {
     loadProducts() {
+      this.productsLoading = true;
+      this.productsLoadingFailed = false;
       clearTimeout(this.loadProductsTimer);
-    this.loadProductsTimer = setTimeout(() => {
-      axios
-        .get(
-          API_BASE_URL+'/api/products',
-          {
-            params: {
-              page: this.page,
-              limit: this.productsPerPage,
-              categoryId: this.filterCategoryId,
-              minPrice: this.filterPriceFrom,
-              maxPrice: this.filterPriceTo,
-              colorId: this.filterColor
-            },
-          }
-        )
-        .then((response) => (this.productsData = response.data));
-    }, 0)
+      this.loadProductsTimer = setTimeout(() => {
+        axios
+          .get(
+            API_BASE_URL+'/api/products',
+            {
+              params: {
+                page: this.page,
+                limit: this.productsPerPage,
+                categoryId: this.filterCategoryId,
+                minPrice: this.filterPriceFrom,
+                maxPrice: this.filterPriceTo,
+                colorId: this.filterColor
+              },
+            }
+          )
+          .then((response) => (this.productsData = response.data))
+          .catch(() => this.productsLoadingFailed = true)
+          .then(() => this.productsLoading = false);
+      }, 3000)
     },
   },
   created() {
