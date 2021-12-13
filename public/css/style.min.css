@@ -1209,7 +1209,7 @@ a {
     -webkit-box-align: start;
     -ms-flex-align: start;
     /* align-items: flex-start; */
-    align-items: end;
+    /* align-items: end; */
 }
 
 .item__code {
