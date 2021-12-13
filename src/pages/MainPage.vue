@@ -15,7 +15,7 @@
 
       <section class="catalog">
         <div v-if="productsLoading">
-          <h2>Выполняется загрузка</h2>
+          <Preloader />
         </div>
 
         <div v-if="productsLoadingFailed">
@@ -42,9 +42,10 @@ import ProductFilter from "@/components/ProductFilter.vue";
 import {API_BASE_URL} from '@/config'
 // import eventBus from '@/eventBus'
 import axios from "axios";
+import Preloader from '../components/Preloader.vue';
 
 export default {
-  components: { ProductList, BasePagination, ProductFilter },
+  components: { ProductList, BasePagination, ProductFilter, Preloader },
   data() {
     return {
       filterPriceFrom: 0,
@@ -149,7 +150,7 @@ export default {
           .then((response) => (this.productsData = response.data))
           .catch(() => this.productsLoadingFailed = true)
           .then(() => this.productsLoading = false);
-      }, 0)
+      }, 10000)
     },
   },
   created() {
