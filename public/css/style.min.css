@@ -1391,5 +1391,19 @@ a {
     grid-row: 3/4
 }
 
-
+.svg-icon {
+    width: 35px;
+    height: 35px;
+  }
+  
+  .svg-icon path,
+  .svg-icon polygon,
+  .svg-icon rect {
+    fill: #4691f6;
+  }
+  
+  .svg-icon circle {
+    stroke: #4691f6;
+    stroke-width: 1;
+  }
 /*# sourceMappingURL=style.min.css.map */

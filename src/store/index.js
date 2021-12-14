@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import products from "@/data/products"
+// import products from "@/data/products"
 import axios from 'axios'
 import { API_BASE_URL } from '../config';
 
@@ -11,6 +11,9 @@ export default new Vuex.Store({
         cartProducts: [],
         userAccessKey: null,
         cartProductsData: [],
+        
+        cartProductsLoading: false,
+        cartProductsLoadingFailed: false
     },
     mutations: {
         addProductToCart(state, payload){
@@ -66,11 +69,20 @@ export default new Vuex.Store({
         },
         totalProducts(state, getters){
             return getters.cartDetailProducts.reduce((acc, item) => item.amount + acc, 0)
+        },
+        cartProductsLoading(state){
+            return state.cartProductsLoading
+        },
+        cartProductsLoadingFailed(state){
+            return state.cartProductsLoadingFailed
         }
     },
     actions: { //действия хранящиеся в функции actions, не ограниченные в синхронности, можно выполнять любые операции (в отличие от mutations)
         loadCart(context){
-            axios.get(API_BASE_URL + '/api/baskets', {
+            context.state.cartProductsLoading = true;
+            context.state.cartProductsLoadingFailed = false;
+            setTimeout(() => {
+                axios.get(API_BASE_URL + '/api/baskets', {
                     params: {userAccessKey: context.state.userAccessKey}
                 })
                 .then(response => {
@@ -79,10 +91,13 @@ export default new Vuex.Store({
                         context.commit('updateUserAccessKey', response.data.user.accessKey);
                     }
 
-                    
                     context.commit('updateCartProductsData', response.data.items);
                     context.commit('syncCartProducts');
                 })
+                .catch(() => context.state.cartProductsLoadingFailed = true)
+                .then(() => context.state.cartProductsLoading = false);
+            }, 3000)
+
         }
     }
 });

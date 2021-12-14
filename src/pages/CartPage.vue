@@ -1,5 +1,11 @@
 <template>
-  <main class="content container">
+  <main class="content container" v-if="cartProductsLoading">
+    <div class="content__top">
+      <Preloader/>
+    </div>
+  </main>
+  <main class="content container" v-else-if="cartProductsLoadingFailed">Не удалось загрузить товар <button @click="loadCart">Попробовать ещё раз</button></main>
+  <main class="content container" v-else>
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
@@ -39,24 +45,29 @@
 
 <script>
 import numberFormat from "@/helpers/numberFormat";
-import { mapGetters } from "vuex";
+import { mapActions, mapGetters } from "vuex";
 import CartItem from '@/components/CartItem'
+import Preloader from '../components/Preloader.vue';
 
 export default {
-  components: { CartItem },
+  components: { CartItem, Preloader },
   filters: {
     numberFormat
   },
   computed: {
     // ...mapGetters(['cartDetailProducts']),
    
-   ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice', totalProducts:'totalProducts'}), //название будущего вычисляемого свойства и геттер(который хотим проксировать)
+   ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice', totalProducts:'totalProducts', cartProductsLoading:'cartProductsLoading', cartProductsLoadingFailed:'cartProductsLoadingFailed'}), //название будущего вычисляемого свойства и геттер(который хотим проксировать)
    
    // products(){
     //   // return this.$store.getters.cartDetailProducts;
     //   return this.cartDetailProducts;
     // }
+  },
+  methods: {
+    ...mapActions(['loadCart'])
   }
+
   
 };
 </script>
