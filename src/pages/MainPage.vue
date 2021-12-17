@@ -22,7 +22,7 @@
           <h2>Произошла ошибка при загрузке товаров</h2> <button @click="loadProducts">Попробовать ещё раз</button>
         </div>
 
-        <ProductList :products="products" />
+        <ProductList v-if="!productsLoading" :products="products" />
 
         <BasePagination
           v-model="page"

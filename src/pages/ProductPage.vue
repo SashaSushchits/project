@@ -136,10 +136,12 @@
                 </button>
               </div>
 
-              <button class="button button--primery" type="submit">
+              <button class="button button--primery" type="submit" :disabled="productAddSending">
                 В корзину
               </button>
             </div>
+            <div v-show="productAdded">Товар добавлен в корзину</div>
+            <div v-show="productAddSending">Добавляем товар в корзину...</div>
           </form>
         </div>
       </div>
@@ -213,6 +215,7 @@ import gotoPage from "@/helpers/gotoPage";
 import numberFormat from "@/helpers/numberFormat";
 import { API_BASE_URL } from "@/config";
 import axios from "axios";
+import { mapActions } from 'vuex'
 
 export default {
   data() {
@@ -221,7 +224,10 @@ export default {
       productAmount: 1,
 
       productsLoading: false,
-      productsLoadingFailed: false
+      productsLoadingFailed: false,
+
+      productAdded: false,
+      productAddSending: false
     };
   },
   filters: {
@@ -233,6 +239,8 @@ export default {
     },
   },
   methods: {
+    ...mapActions(['addProductToCart']),
+
     gotoPage,
     addToCart() {
       if (this.productAmount < 1) {
@@ -241,11 +249,14 @@ export default {
           "Вы ввели не корректное значение, пожалуйста, введите количество товара равное одному и больше"
         );
       } else {
-        this.$store.commit("addProductToCart", {
-          productId: this.product.id,
-          amount: this.productAmount,
-        });
-      }
+        this.productAdded = false;
+        this.productAddSending = true;
+        this.addProductToCart({productId: this.product.id, amount: this.productAmount})
+          .then(() => {
+            this.productAdded = true;
+            this.productAddSending = false;
+          })
+        }
     },
     loadProducts() {
       this.productsLoading = true;
@@ -254,7 +265,7 @@ export default {
         .then(response => this.productsData = response.data)
         .catch(() => this.productsLoadingFailed = true)
         .then(() => this.productsLoading = false);
-    },
+    }
   },
   // created() {
   //   this.loadProducts();
