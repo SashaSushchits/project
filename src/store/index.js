@@ -11,6 +11,8 @@ export default new Vuex.Store({
         cartProducts: [],
         userAccessKey: null,
         cartProductsData: [],
+
+        orderInfo: null,
         
         cartProductsLoading: false,
         cartProductsLoadingFailed: false
@@ -27,6 +29,9 @@ export default new Vuex.Store({
         //         })
         //     }  
         // },
+        updateOrderInfo(state, orderInfo) {
+            state.orderInfo = orderInfo;
+        },
         resetCart(state) {
             state.cartProducts = [];
             state.cartProductsData = [];
@@ -80,9 +85,20 @@ export default new Vuex.Store({
         },
         cartProductsLoadingFailed(state){
             return state.cartProductsLoadingFailed
+        },
+        getOrderInfo(state){
+            return state.orderInfo
         }
     },
     actions: { //действия хранящиеся в функции actions, не ограниченные в синхронности, можно выполнять любые операции (в отличие от mutations)
+        loadOrderInfo(context, orderId) {
+           return axios.get(API_BASE_URL + '/api/orders' + orderId, {
+                params: {userAccessKey: context.state.userAccessKey}
+            })
+            .then(response => {
+                context.commit('updateOrderInfo', response.data)
+            })
+        },
         loadCart(context){
             context.state.cartProductsLoading = true;
             context.state.cartProductsLoadingFailed = false;
