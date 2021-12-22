@@ -4,6 +4,7 @@ import MainPage from '@/pages/MainPage'
 import ProductPage from '@/pages/ProductPage'
 import CartPage from '@/pages/CartPage'
 import NotFoundPage from '@/pages/NotFoundPage'
+import OrderPage from '@/pages/OrderPage'
 
 Vue.use(VueRouter);
 
@@ -11,6 +12,7 @@ const routes = [
     {name: 'main', component: MainPage, path:'/'},
     {name: 'product', component: ProductPage, path:'/product/:id'},  //id-динамический сегмент
     {name: 'cart', component: CartPage, path:'/cart'},
+    {name: 'order', component: OrderPage, path:'/order'},
     {name: 'notFound', component: NotFoundPage, path:'/*'},
 ]; //создаем массив, где будут храниться маршруты и подключаем его к экземпляру
 
