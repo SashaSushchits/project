@@ -18,7 +18,7 @@
       </ul>
 
       <h1 class="content__title">Корзина</h1>
-      <span class="content__info"> 3 товара </span>
+      <span class="content__info"> Количество товаров: {{ totalProducts }}  шт.</span>
     </div>
 
     <section class="cart">
@@ -26,43 +26,13 @@
         <div class="cart__field">
           <div class="cart__data">
 
-            <BaseFormText title='ФИО' :error="formError.name" v-model="formData.name" placeholder="Введите ваше полное имя" />
+            <BaseFormText title='ФИО' :error="formError.name" type="text" v-model="formData.name" placeholder="Введите ваше полное имя" />
 
-            <label class="form__label">
-              <input
-                class="form__input"
-                type="text"
-                v-model="formData.address"
-                name="address"
-                placeholder="Введите ваш адрес"
-              />
-              <span class="form__value">Адрес доставки</span>
-              <span class="form__error" v-if="formError.address">{{ formError.address }}</span>
-            </label>
-
-            <label class="form__label">
-              <input
-                class="form__input"
-                type="tel"
-                v-model="formData.phone"
-                name="phone"
-                placeholder="Введите ваш телефон"
-              />
-              <span class="form__value">Телефон</span>
-              <span class="form__error" v-if="formError.phone">{{ formError.phone }}</span>
-            </label>
-
-            <label class="form__label">
-              <input
-                class="form__input"
-                type="email"
-                v-model="formData.email"
-                name="email"
-                placeholder="Введи ваш Email"
-              />
-              <span class="form__value">Email</span>
-              <span class="form__error" v-if="formError.email">{{ formError.email }}</span>
-            </label>
+            <BaseFormText title='Адрес доставки' :error="formError.address" type="text" v-model="formData.address" placeholder="Введите ваш адрес" />
+            
+            <BaseFormText title='Телефон' :error="formError.phone" type="tel" v-model="formData.phone" placeholder="Введите ваш телефон" />
+            
+            <BaseFormText title='Email' :error="formError.email" type="email" v-model="formData.email" placeholder="Введи ваш Email" />
 
             <BaseFormTextarea title='Комментарий к заказу' :error="formError.comments" v-model="formData.comments" placeholder="Ваши пожелания"/>
 
@@ -128,26 +98,17 @@
 
         <div class="cart__block">
           <ul class="cart__orders">
-            <li class="cart__order">
-              <h3>Смартфон Xiaomi Redmi Note 7 Pro 6/128GB</h3>
-              <b>18 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Гироскутер Razor Hovertrax 2.0ii</h3>
-              <b>4 990 ₽</b>
-              <span>Артикул: 150030</span>
-            </li>
-            <li class="cart__order">
-              <h3>Электрический дрифт-карт Razor Lil’ Crazy</h3>
-              <b>8 990 ₽</b>
-              <span>Артикул: 150030</span>
+            <li class="cart__order" v-for="product in products" :key="product.productId">
+              <h3>{{ product.product.title }}</h3>
+              <b>{{ (product.amount * product.product.price) | numberFormat }} Br</b>
+              <span>Количесвто: {{ product.amount }} шт.</span> <br>
+              <span>Артикул: {{ product.productId }}</span>
             </li>
           </ul>
 
           <div class="cart__total">
-            <p>Доставка: <b>500 ₽</b></p>
-            <p>Итого: <b>3</b> товара на сумму <b>37 970 ₽</b></p>
+            <p>Доставка: <b>50 Br</b></p>
+            <p>Итого: <b>{{ totalProducts }}</b> товара на сумму <b>{{ (totalPrice + 50) | numberFormat}} Br</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -167,15 +128,23 @@
 </template>
 
 <script>
-import BaseFormTextarea from '@/components/BaseFormTextarea'
-import BaseFormText from '@/components/BaseFormText'
+import BaseFormTextarea from '@/components/BaseFormTextarea';
+import BaseFormText from '@/components/BaseFormText';
+import { mapGetters } from "vuex";
+import numberFormat from "@/helpers/numberFormat";
 export default {
     components:{BaseFormText, BaseFormTextarea},
+    filters: {
+        numberFormat
+    },
     data() {
         return{
             formData: {},
             formError: {}
         }
+    },
+    computed: {
+        ...mapGetters({products: 'cartDetailProducts', totalPrice: 'cartTotalPrice', totalProducts:'totalProducts'})
     }
 };
 </script>

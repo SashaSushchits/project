@@ -34,7 +34,7 @@
           </p>
           <p class="cart__price">Итого: <span>{{ totalPrice | numberFormat}} Br</span></p>
 
-          <router-link tag="button" :to="{name: 'order'}" class="cart__button button button--primery" type="submit">
+          <router-link v-if="totalProducts" tag="button" :to="{name: 'order'}" class="cart__button button button--primery" type="submit">
             Оформить заказ
           </router-link>
         </div>
