@@ -92,7 +92,7 @@ export default new Vuex.Store({
     },
     actions: { //действия хранящиеся в функции actions, не ограниченные в синхронности, можно выполнять любые операции (в отличие от mutations)
         loadOrderInfo(context, orderId) {
-           return axios.get(API_BASE_URL + '/api/orders' + orderId, {
+           return axios.get(API_BASE_URL + '/api/orders/' + orderId, {
                 params: {userAccessKey: context.state.userAccessKey}
             })
             .then(response => {
