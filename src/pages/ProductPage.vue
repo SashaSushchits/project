@@ -29,7 +29,7 @@
           <img
             width="570"
             height="570"
-            :src="product.image.file.url"
+            :src="product.preview.file.url"
             :alt="product.title"
           />
         </div>

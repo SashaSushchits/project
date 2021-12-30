@@ -19,13 +19,17 @@
         <legend class="form__legend">Категория</legend>
         <label class="form__label form__label--select">
           <select class="form__select" type="text" name="category" v-model.number="currentCategoryId">
-            <option value="0">Все категории</option>
+            <option value="0" disabled>Все категории</option>
             <option :value="category.id" v-for="category in categories" :key="category.id"> {{ category.title }} </option>
           </select>
         </label>
       </fieldset>
 
-      <fieldset class="form__block">
+      <fieldset v-if="!categoriesDataId" class="form__block">
+        <legend class="form__legend">Пожалуйста, выберите другую категорию, к сожалению, в данной категории товары закончились</legend>
+      </fieldset>
+
+      <fieldset v-if="categoriesDataId && categoriesDataId !== []" class="form__block">
         <legend class="form__legend">Цвет</legend>
         <ul class="colors">
           <li class="colors__item" v-for="color in colors" :key="color.id">
@@ -36,7 +40,7 @@
                 type="radio"
                 name="color"
                 :value = color.id 
-                checked=""
+                :checked = 'false'
               />
               <span class="colors__value" :style="{backgroundColor: color.code}"></span>
             </label>
@@ -44,91 +48,21 @@
         </ul>
       </fieldset>
 
-      <fieldset class="form__block">
-        <legend class="form__legend">Объемб в ГБ</legend>
+      <fieldset v-if="categoriesDataId && categoriesDataId !== []" class="form__block">
+        <legend class="form__legend">{{ categoriesDataId.title }}</legend>
         <ul class="check-list">
-          <li class="check-list__item">
+          <li class="check-list__item" v-for="categories in categoriesDataId.availableValues" :key="categories.value">
             <label class="check-list__label">
               <input
                 class="check-list__check sr-only"
                 type="checkbox"
                 name="volume"
-                value="8"
-                checked=""
+                :value="8"
+                :checked = 'false'
               />
               <span class="check-list__desc">
-                8
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="16"
-              />
-              <span class="check-list__desc">
-                16
-                <span>(461)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="32"
-              />
-              <span class="check-list__desc">
-                32
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="64"
-              />
-              <span class="check-list__desc">
-                64
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="128"
-              />
-              <span class="check-list__desc">
-                128
-                <span>(313)</span>
-              </span>
-            </label>
-          </li>
-          <li class="check-list__item">
-            <label class="check-list__label">
-              <input
-                class="check-list__check sr-only"
-                type="checkbox"
-                name="volume"
-                value="264"
-              />
-              <span class="check-list__desc">
-                264
-                <span>(313)</span>
+                {{ categories.value }}
+                <span>({{ categories.productsCount }})</span>
               </span>
             </label>
           </li>
@@ -160,34 +94,18 @@ export default {
       currentColor:'', // передаем не цвет, а id цвета, и проверяем, есть ли это цвет в товаре
 
       categoriesData: null,
-      colorsData: null
+      colorsData: null,
+
+      categoriesDataId: []
     }
   },
   props:['priceFrom', 'priceTo', 'categoryId', 'filterColor'],
   computed: {
-    // currentPriceFrom:{
-    //   get(){
-    //     return this.priceFrom;
-    //   },
-    //   set(value){
-    //     this.$emit('update:priceFrom', value)
-    //   }
-    // },
     categories() {
       return this.categoriesData ? this.categoriesData.items : [];
     },
     colors() {
       return this.colorsData ? this.colorsData.items : [];
-
-      // const uniqueColors = [];
-      // products.forEach(item => {
-      //   item.color.forEach(currentColor => {
-      //     if(!uniqueColors.includes(currentColor)) {
-      //       uniqueColors.push(currentColor)
-      //     }
-      //   })
-      // })
-      // return uniqueColors
     },
   },
   methods: {
@@ -196,7 +114,6 @@ export default {
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
       this.$emit('update:filterColor', this.currentColor);
-      // gotoPage('main', {page:1})
     },
     reset(){
       this.$emit('update:priceFrom', 0);
@@ -212,6 +129,16 @@ export default {
       axios.get(API_BASE_URL+'/api/colors')
         .then(response => this.colorsData = response.data)
     },
+    loadCategoriesId(){
+      axios.get(API_BASE_URL+'/api/productCategories/' + this.currentCategoryId)
+        .then(response => this.categoriesDataId = response.data.productProps[0])
+        // .then(response => this.categoriesDataId = response.data.productProps.map(item => item.availableValues)[0])
+    },
+  },
+  watch: {
+    currentCategoryId() {
+      this.loadCategoriesId()
+    }
   },
   created() {
     this.loadCategories(),

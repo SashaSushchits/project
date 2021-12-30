@@ -95,7 +95,7 @@ a {
 }
 
 .container {
-    width: 1200px;
+    width: 1280px;
     margin: 0 auto;
     padding-left: 15px;
     padding-right: 15px
@@ -265,7 +265,7 @@ a {
 
 .content__catalog {
     display: grid;
-    grid-template-columns: 290px 1fr;
+    grid-template-columns: 320px 1fr;
     grid-gap: 20px;
     -webkit-box-align: start;
     -ms-flex-align: start;
@@ -1029,11 +1029,11 @@ a {
 }
 
 .sizes {
-    margin: 0;
+    margin: 5px;
     padding: 0;
     list-style: none;
     --text-color: #B9B9B9;
-    --text-current: #222;
+    
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -1409,3 +1409,9 @@ a {
     stroke-width: 1;
   }
 /*# sourceMappingURL=style.min.css.map */
+
+.active {
+    --text-current: #222;
+    background:lightslategray;
+    border-radius: 10px;
+}

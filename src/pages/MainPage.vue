@@ -18,6 +18,10 @@
           <Preloader />
         </div>
 
+         <div v-if="countProducts === 0 && !productsLoading && !productsLoadingFailed">
+          <h1>Попробуйте выбрать другую категорию</h1>
+        </div>
+
         <div v-if="productsLoadingFailed">
           <h2>Произошла ошибка при загрузке товаров</h2> <button @click="loadProducts">Попробовать ещё раз</button>
         </div>
@@ -53,8 +57,7 @@ export default {
       filterCategoryId: 0,
       filterColor: "",
       page: 1,
-      productsPerPage: 3, //на странице
-      // allProducts: products, // products:products можно просто products
+      productsPerPage: 12, //на странице
 
       productsData: null,
 
@@ -62,69 +65,19 @@ export default {
       productsLoadingFailed: false
     }
   },
-  // created() {
-  //   eventBus.$on('gotoPage', (pageName, pageParams) => {this.page = pageParams.page})
-  // }, // eventBus должен принимать и обрабатывать
   computed: {
-    // filteredProducts() {
-    //   let filteredProducts = this.allProducts;
-    //   if (this.filterPriceFrom > 0) {
-    //     filteredProducts = filteredProducts.filter(
-    //       (product) => product.price > this.filterPriceFrom
-    //     );
-    //   }
-    //   if (this.filterPriceTo > 0) {
-    //     filteredProducts = filteredProducts.filter(
-    //       (product) => product.price < this.filterPriceTo
-    //     );
-    //   }
-    //   if (this.filterCategoryId) {
-    //     filteredProducts = filteredProducts.filter(
-    //       (product) => product.categoryId === this.filterCategoryId
-    //     );
-    //   }
-    //   if (this.filterColor) {
-    //     console.log(this.filterColor)
-    //     filteredProducts = filteredProducts.filter(
-    //       (product) => product.color.includes(this.filterColor)
-    //     );
-    //   }
-    //   return filteredProducts;
-    // },
-    // filteredProducts() {
-    //   return this.allProducts.filter((product) => {
-    //     if (this.filterPriceFrom > 0 && product.price < this.filterPriceFrom) {
-    //       return false
-    //     };
-    //     if (this.filterPriceTo > 0 && product.price > this.filterPriceTo) {
-    //       return false
-    //     };
-    //     if (this.filterCategoryId && product.categoryId !== this.filterCategoryId) {
-    //       return false
-    //     };
-    //     if (this.filterColor && !product.color.includes(this.filterColor)) {
-    //       console.log(this.filterColor)
-    //       return false
-    //     };
-    //     return true
-    //   });
-    // },
     products() {
       return this.productsData
         ? this.productsData.items.map((product) => {
             return {
               ...product,
-              image: product.image.file.url,
-              // color: product.colors.code, 
+              image: product.preview.file.url, 
             };
           })
         : [];
-      // const offset = (this.page - 1) * this.productsPerPage;
-      // return this.filteredProducts.slice(offset, offset + this.productsPerPage);
     },
     countProducts() {
       return this.productsData ? this.productsData.pagination.total : 0;
-      // return this.filteredProducts.length;
     },
   },
   methods: {
@@ -141,9 +94,8 @@ export default {
                 page: this.page,
                 limit: this.productsPerPage,
                 categoryId: this.filterCategoryId,
-                minPrice: this.filterPriceFrom,
-                maxPrice: this.filterPriceTo,
-                colorId: this.filterColor
+                
+                
               },
             }
           )
@@ -180,14 +132,6 @@ export default {
     filteredProducts() {
       this.page = 1;
     },
-    //   filterPriceFrom() {
-    //     this.page = 1
-    //   } ,
-    //   filterPriceTo: 0,
-    //   filterCategoryId: 0,
-    //   filterColor() {
-    //     this.page = 1
-    //   },
   },
 };
 </script>
