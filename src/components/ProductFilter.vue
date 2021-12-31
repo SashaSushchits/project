@@ -35,9 +35,9 @@
           <li class="colors__item" v-for="color in colors" :key="color.id">
             <label class="colors__label">
               <input
-                v-model="currentColor"
+                @click="pushColors(color.id)"
                 class="colors__radio sr-only"
-                type="radio"
+                type="checkbox"
                 name="color"
                 :value = color.id 
                 :checked = 'false'
@@ -54,6 +54,7 @@
           <li class="check-list__item" v-for="categories in categoriesDataId.availableValues" :key="categories.value">
             <label class="check-list__label">
               <input
+                @click="pushProps(categories.value)"
                 class="check-list__check sr-only"
                 type="checkbox"
                 name="volume"
@@ -62,11 +63,15 @@
               />
               <span class="check-list__desc">
                 {{ categories.value }}
-                <span>({{ categories.productsCount }})</span>
+              <span>({{ categories.productsCount }})</span>
               </span>
             </label>
           </li>
         </ul>
+      </fieldset>
+
+      <fieldset v-if="categoriesDataId && categoriesDataId.code === 'length'" class="form__block">
+        <legend class="form__legend">Похоже товары закончились, пожалуйста, выберите другую категорию</legend>
       </fieldset>
 
       <button class="filter__submit button button--primery" type="submit" @click.prevent="submit">    <!-- почему клик не здесь -->
@@ -95,11 +100,14 @@ export default {
 
       categoriesData: null,
       colorsData: null,
+      currentPropsData: [],
+      currentPropsCode: [],
+      currentColorData: [],
 
       categoriesDataId: []
     }
   },
-  props:['priceFrom', 'priceTo', 'categoryId', 'filterColor'],
+  props:['priceFrom', 'priceTo', 'categoryId', 'filterColor', 'propsData', 'propsCode'],
   computed: {
     categories() {
       return this.categoriesData ? this.categoriesData.items : [];
@@ -113,13 +121,20 @@ export default {
       this.$emit('update:priceFrom', this.currentPriceFrom);
       this.$emit('update:priceTo', this.currentPriceTo);
       this.$emit('update:categoryId', this.currentCategoryId);
-      this.$emit('update:filterColor', this.currentColor);
+      this.$emit('update:filterColor', this.currentColorData);
+      this.$emit('update:propsData', this.currentPropsData);
+      this.$emit('update:propsCode', this.currentPropsCode);
+      this.propsCodeData();
     },
     reset(){
       this.$emit('update:priceFrom', 0);
       this.$emit('update:priceTo', 0);
       this.$emit('update:categoryId', 0);
-      this.$emit('update:filterColor', '');
+      this.$emit('update:filterColor', []);
+      this.$emit('update:propsData', []);
+      this.$emit('update:propsCode', null);
+      this.currentPropsCode = []
+      this.currentPropsData = []
     },
     loadCategories(){
       axios.get(API_BASE_URL+'/api/productCategories')
@@ -134,15 +149,29 @@ export default {
         .then(response => this.categoriesDataId = response.data.productProps[0])
         // .then(response => this.categoriesDataId = response.data.productProps.map(item => item.availableValues)[0])
     },
+    pushProps(id){
+      if(this.currentPropsData.includes(id)) this.currentPropsData.splice(this.currentPropsData.indexOf(id), 1)
+      else this.currentPropsData.push(id)
+    },
+    pushColors(id){
+      if(this.currentColorData.includes(id)) this.currentColorData.splice(this.currentColorData.indexOf(id), 1)
+      else this.currentColorData.push(id)
+    },
+    propsCodeData() {
+      if(this.categoriesDataId && this.currentPropsCode.length === 0) this.currentPropsCode.push(this.categoriesDataId.code)
+      
+    }
   },
   watch: {
     currentCategoryId() {
       this.loadCategoriesId()
+      this.currentPropsData = [];
+      this.currentPropsCode = []
     }
-  },
-  created() {
-    this.loadCategories(),
-    this.loadColors()
-  }
+    },
+    created() {
+      this.loadCategories(),
+      this.loadColors()
+    }
 }
 </script>

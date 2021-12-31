@@ -11,6 +11,9 @@
         :price-to.sync="filterPriceTo"
         :category-id.sync="filterCategoryId"
         :filter-color.sync="filterColor"
+        :props-data.sync="propsData"
+        :props-code.sync="propsCode"
+        
       />
 
       <section class="catalog">
@@ -55,11 +58,13 @@ export default {
       filterPriceFrom: 0,
       filterPriceTo: 0,
       filterCategoryId: 0,
-      filterColor: "",
+      filterColor: [],
       page: 1,
       productsPerPage: 12, //на странице
 
       productsData: null,
+      propsData: null,
+      propsCode: null,
 
       productsLoading: false,
       productsLoadingFailed: false
@@ -76,6 +81,15 @@ export default {
           })
         : [];
     },
+    productsColor(){
+
+    },
+    // productsCode(){
+    //   if(this.productsData && this.filterCategoryId !== 0) return Array.from(new Set(this.products.map(item => item.mainProp.code)))
+    // },
+
+    productsCode(){ return this.propsCode ? this.propsCode : []  },
+    productsPropsData(){ return this.propsData ? this.propsData : []  },
     countProducts() {
       return this.productsData ? this.productsData.pagination.total : 0;
     },
@@ -86,23 +100,19 @@ export default {
       this.productsLoadingFailed = false;
       clearTimeout(this.loadProductsTimer);
       this.loadProductsTimer = setTimeout(() => {
-        axios
-          .get(
-            API_BASE_URL+'/api/products',
-            {
-              params: {
-                page: this.page,
-                limit: this.productsPerPage,
-                categoryId: this.filterCategoryId,
-                
-                
-              },
-            }
-          )
+        if(this.productsPropsData.length !== 0 && this.propsCode) {
+          console.log(this.propsCode, this.productsPropsData.length)
+          axios
+          .get(API_BASE_URL+`/api/products?page=${this.page}&limit=${this.productsPerPage}&categoryId=${this.filterCategoryId}&props[${this.productsCode}][]=${this.propsData}`)
           .then((response) => (this.productsData = response.data))
           .catch(() => this.productsLoadingFailed = true)
           .then(() => this.productsLoading = false);
-      }, 3000)
+        } else axios
+          .get(API_BASE_URL+`/api/products?page=${this.page}&limit=${this.productsPerPage}&categoryId=${this.filterCategoryId}`)
+          .then((response) => (this.productsData = response.data))
+          .catch(() => this.productsLoadingFailed = true)
+          .then(() => this.productsLoading = false);
+      }, 3000) 
     },
   },
   created() {
@@ -126,6 +136,14 @@ export default {
       this.page = 1;
     },
     filterColor() {
+      this.loadProducts();
+      this.page = 1;
+    },
+    propsData() {
+      this.loadProducts();
+      this.page = 1;
+    },
+    propsCode() {
       this.loadProducts();
       this.page = 1;
     },
