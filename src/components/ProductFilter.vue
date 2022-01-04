@@ -133,8 +133,13 @@ export default {
       this.$emit('update:filterColor', []);
       this.$emit('update:propsData', []);
       this.$emit('update:propsCode', null);
-      this.currentPropsCode = []
-      this.currentPropsData = []
+      this.currentPropsCode = [];
+      this.currentPropsData = [];
+      this.currentColorData = [];
+      this.currentPriceFrom = 0;
+      this.currentPriceTo = 0;
+      this.currentCategoryId = 0;
+      this.categoriesDataId = [];
     },
     loadCategories(){
       axios.get(API_BASE_URL+'/api/productCategories')
@@ -164,9 +169,11 @@ export default {
   },
   watch: {
     currentCategoryId() {
-      this.loadCategoriesId()
-      this.currentPropsData = [];
-      this.currentPropsCode = []
+      if(this.currentCategoryId !==0 ) {
+        this.loadCategoriesId()
+        this.currentPropsData = [];
+        this.currentPropsCode = []
+      }
     }
     },
     created() {

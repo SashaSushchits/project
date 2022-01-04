@@ -5,16 +5,8 @@
     <div class="content__top">
       <ul class="breadcrumbs">
         <li class="breadcrumbs__item">
-          <!-- <router-link tag='button' class="breadcrumbs__link" to="/"> Каталог </router-link>  для кнопки указываем тег-->
-          <!-- <router-link class="breadcrumbs__link" to="/"> Каталог </router-link> -->
           <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
             Каталог
-          </router-link>
-        </li>
-        <li class="breadcrumbs__item">
-          <!-- <a class="breadcrumbs__link" @click.prevent="$router.push({name:'main'})"> {{ category.title }} </a> если нужно переключить программно, в каком-нибудь методе компонента, то этот способ -->
-          <router-link class="breadcrumbs__link" :to="{ name: 'main' }">
-            {{ product.category.title }}
           </router-link>
         </li>
         <li class="breadcrumbs__item">
@@ -45,7 +37,7 @@
             method="POST"
             @submit.prevent="addToCart"
           >
-            <b class="item__price"> {{ product.price | numberFormat }} Br </b>
+            <b class="item__price"> {{ changePrice | numberFormat }} Br </b>
 
             <fieldset class="form__block">
               <legend class="form__legend">Цвет:</legend>
@@ -61,7 +53,7 @@
                     />
                     <span
                       class="colors__value"
-                      :style="{backgroundColor: color.code}"
+                      :style="{backgroundColor: color.color.code}"
                     >
                     </span>
                   </label>
@@ -71,40 +63,15 @@
 
             <fieldset class="form__block">
               <legend class="form__legend">Объемб в ГБ:</legend>
-
               <ul class="sizes sizes--primery">
-                <li class="sizes__item">
+                <li class="sizes__item" v-for="offer in product.offers" :key="offer.id">
                   <label class="sizes__label">
-                    <input
-                      class="sizes__radio sr-only"
-                      type="radio"
-                      name="sizes-item"
-                      value="32"
-                    />
-                    <span class="sizes__value"> 32gb </span>
-                  </label>
-                </li>
-                <li class="sizes__item">
-                  <label class="sizes__label">
-                    <input
-                      class="sizes__radio sr-only"
-                      type="radio"
-                      name="sizes-item"
-                      value="64"
-                    />
-                    <span class="sizes__value"> 64gb </span>
-                  </label>
-                </li>
-                <li class="sizes__item">
-                  <label class="sizes__label">
-                    <input
-                      class="sizes__radio sr-only"
-                      type="radio"
-                      name="sizes-item"
-                      value="128"
-                      checked=""
-                    />
-                    <span class="sizes__value"> 128gb </span>
+                    <input class="sizes__radio sr-only" type="radio" name="sizes-1" :value='offer.id'>
+                    <span class="sizes__value" 
+                          :class="{ active: params === offer.id }" 
+                          @click="params = offer.id">
+                            {{ offer.propValues.map(item => {if(item.productProp.code !== 'color') return item.value})[0] }}
+                    </span>
                   </label>
                 </li>
               </ul>
@@ -149,7 +116,7 @@
       <div class="item__desc">
         <ul class="tabs">
           <li class="tabs__item">
-            <a class="tabs__link tabs__link--current"> Описание </a>
+            <a class="tabs__link" href="#"> Описание </a>
           </li>
           <li class="tabs__item">
             <a class="tabs__link" href="#"> Характеристики </a>
@@ -184,7 +151,7 @@
             различные приложения сторонних разработчиков. Велокомпьютер точно
             отслеживает местоположение, принимая сигнал с целого комплекса
             спутников. Эта информация позволяет смотреть уже преодоленные
-            маршруты и планировать новые велопрогулки.
+            маршруты и планировать новые велопрогулки.
           </p>
 
           <h3>Дизайн</h3>
@@ -193,14 +160,14 @@
             Велокомпьютер Wahoo ELEMNT BOLT очень компактный. Размеры устройства
             составляют всего 74,6 x 47,3 x 22,1 мм. что не превышает габариты
             смартфона. Корпус гаджета выполнен из черного пластика.
-            На обращенной к пользователю стороне расположен дисплей диагональю
+            На обращенной к пользователю стороне расположен дисплей диагональю
             56 мм. На дисплей выводятся координаты и скорость, а также
-            полученная со смартфона и синхронизированных датчиков информация:
+            полученная со смартфона и синхронизированных датчиков информация:
             интенсивность, скорость вращения педалей, пульс и т.д. (датчики не
             входят в комплект поставки). Корпус велокомпьютера имеет степень
-            защиты от влаги IPX7. Это означает, что устройство не боится пыли, а
+            защиты от влаги IPX7. Это означает, что устройство не боится пыли, а
             также выдерживает кратковременное (до 30 минут) погружение в воду на
-            глубину не более 1 метра.
+            глубину не более 1 метра.
           </p>
         </div>
       </div>
@@ -209,8 +176,6 @@
 </template>
 
 <script>
-// import products from "@/data/products";
-// import categories from "@/data/categories";
 import gotoPage from "@/helpers/gotoPage";
 import numberFormat from "@/helpers/numberFormat";
 import { API_BASE_URL } from "@/config";
@@ -227,7 +192,10 @@ export default {
       productsLoadingFailed: false,
 
       productAdded: false,
-      productAddSending: false
+      productAddSending: false,
+
+      params: null,
+      totalPrice: null
     };
   },
   filters: {
@@ -237,6 +205,11 @@ export default {
     product() {
       return this.productsData ? this.productsData : [];
     },
+    changePrice() {
+      if(this.params) {
+        return this.totalPrice = this.product.offers.find((item) => item.id === this.params).price
+      } return this.product.price
+    }
   },
   methods: {
     ...mapActions(['addProductToCart']),
@@ -267,13 +240,7 @@ export default {
         .then(() => this.productsLoading = false);
     }
   },
-  // created() {
-  //   this.loadProducts();
-  // }, //можно убрать, если код ниже
   watch: {
-    // '$route.params.id'() {
-    //   this.loadProducts();
-    // }
     '$route.params.id': {
       handler() {
         this.loadProducts();

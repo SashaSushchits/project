@@ -71,7 +71,7 @@ export default {
     }
   },
   computed: {
-    products() {
+    productsFrom() {
       return this.productsData
         ? this.productsData.items.map((product) => {
             return {
@@ -81,17 +81,36 @@ export default {
           })
         : [];
     },
-    productsColor(){
-
+    filteredProducts(){
+      let filteredProducts = this.productsFrom;
+      if (this.filterPriceFrom > 0) {
+        filteredProducts = filteredProducts.filter(
+          (product) => product.price > this.filterPriceFrom
+        );
+      }
+      if (this.filterPriceTo > 0) {
+        filteredProducts = filteredProducts.filter(
+          (product) => product.price < this.filterPriceTo
+        );
+      }
+      if (this.filterColor.length !== 0 ){
+        for (let i = 0; i < this.filterColor.length; i++) {
+          filteredProducts = filteredProducts.filter(item => item.colors.find(item => item.color.id === this.filterColor[i]))
+        }
+      }
+      console.log(filteredProducts)
+      return filteredProducts;
+      
     },
-    // productsCode(){
-    //   if(this.productsData && this.filterCategoryId !== 0) return Array.from(new Set(this.products.map(item => item.mainProp.code)))
-    // },
-
+    
     productsCode(){ return this.propsCode ? this.propsCode : []  },
     productsPropsData(){ return this.propsData ? this.propsData : []  },
     countProducts() {
-      return this.productsData ? this.productsData.pagination.total : 0;
+      return this.filteredProducts ? this.filteredProducts.length : 0;
+    },
+    products() {
+      const offset = (this.page - 1) * this.productsPerPage;
+      return this.filteredProducts.slice(offset, offset + this.productsPerPage);
     },
   },
   methods: {
@@ -102,13 +121,15 @@ export default {
       this.loadProductsTimer = setTimeout(() => {
         if(this.productsPropsData.length !== 0 && this.propsCode) {
           console.log(this.propsCode, this.productsPropsData.length)
+          let link = API_BASE_URL+`/api/products?page=${this.page}&limit=${this.productsPerPage}&categoryId=${this.filterCategoryId}`;
+          let newLink = this.propsData.reduce((acc, el) => acc+`&props[${this.productsCode}][]=${el}`, link)
           axios
-          .get(API_BASE_URL+`/api/products?page=${this.page}&limit=${this.productsPerPage}&categoryId=${this.filterCategoryId}&props[${this.productsCode}][]=${this.propsData}`)
+          .get(newLink)
           .then((response) => (this.productsData = response.data))
           .catch(() => this.productsLoadingFailed = true)
           .then(() => this.productsLoading = false);
         } else axios
-          .get(API_BASE_URL+`/api/products?page=${this.page}&limit=${this.productsPerPage}&categoryId=${this.filterCategoryId}`)
+          .get(API_BASE_URL+`/api/products?&categoryId=${this.filterCategoryId}`)
           .then((response) => (this.productsData = response.data))
           .catch(() => this.productsLoadingFailed = true)
           .then(() => this.productsLoading = false);
@@ -120,9 +141,7 @@ export default {
   },
 
   watch: {
-    page() {
-      this.loadProducts();
-    },
+    
     filterPriceFrom() {
       this.loadProducts();
       this.page = 1;

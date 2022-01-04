@@ -20,6 +20,7 @@
             type="radio"
             name="radio"
             value= color.id
+        
           />
           <span class="colors__value" :style="{backgroundColor: color.color.code}"> </span>
         </label>
@@ -54,7 +55,8 @@
     data() {
       return {
         params: null,
-        totalPrice: null
+        totalPrice: null,
+
       }
     },
     computed: {
@@ -65,19 +67,13 @@
       },
       offerValue() {
         return this.product.offers.map(item => {if (item.propValues[0].productProp.code !== 'color') return item.propValues[0]})
-      },
+      },    
     },
     filters: {
       numberFormat
     },
-    methods: {
-      // getOffer(arr){
-      //   arr.propValues.map(item => {if(item.productProp.code !== 'color') return item.value})[0]
-      // }
-      // offerValue() {
-      //   this.product.offers.propValues.productProp.map(item => {if(item.productProp.code !== 'color') return item.value})
-      // }
-
+    methods:{
+     
     },
     props: ["product"],
   };
