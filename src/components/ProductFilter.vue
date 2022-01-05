@@ -39,6 +39,7 @@
                 class="colors__radio sr-only"
                 type="checkbox"
                 name="color"
+                v-model="currentColorData"
                 :value = color.id 
                 :checked = 'false'
               />
@@ -77,7 +78,7 @@
       <button class="filter__submit button button--primery" type="submit" @click.prevent="submit">    <!-- почему клик не здесь -->
         Применить
       </button>
-      <button class="filter__reset button button--second" type="button" @click.prevent="reset">
+      <button v-if="buttonReset" class="filter__reset button button--second" type="button" @click.prevent="reset">
         Сбросить
       </button>
     </form>
@@ -103,6 +104,8 @@ export default {
       currentPropsData: [],
       currentPropsCode: [],
       currentColorData: [],
+
+      buttonReset: false,
 
       categoriesDataId: []
     }
@@ -132,7 +135,7 @@ export default {
       this.$emit('update:categoryId', 0);
       this.$emit('update:filterColor', []);
       this.$emit('update:propsData', []);
-      this.$emit('update:propsCode', null);
+      this.$emit('update:propsCode', []);
       this.currentPropsCode = [];
       this.currentPropsData = [];
       this.currentColorData = [];
@@ -140,6 +143,7 @@ export default {
       this.currentPriceTo = 0;
       this.currentCategoryId = 0;
       this.categoriesDataId = [];
+      this.buttonReset = false
     },
     loadCategories(){
       axios.get(API_BASE_URL+'/api/productCategories')
@@ -172,9 +176,26 @@ export default {
       if(this.currentCategoryId !==0 ) {
         this.loadCategoriesId()
         this.currentPropsData = [];
-        this.currentPropsCode = []
+        this.currentPropsCode = [];
+        this.buttonReset = true
       }
-    }
+    },
+    currentPriceFrom(){
+      if(this.currentPriceFrom === 0){
+        this.buttonReset = false
+      } this.buttonReset = true
+    },
+    currentPriceTo(){
+      if(this.currentPriceTo !==0 ){
+        this.buttonReset = true
+      }
+    },
+    currentColorData(){
+      if(this.currentColorData.length !==0 ){
+        this.buttonReset = true
+      }
+    },
+
     },
     created() {
       this.loadCategories(),

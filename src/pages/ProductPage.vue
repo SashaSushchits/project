@@ -48,7 +48,8 @@
                       class="colors__radio sr-only"
                       type="radio"
                       name="color-item"
-                      value= color.id
+                      :value= color.color.id
+                      v-model="colorId"
                       checked=""
                     />
                     <span
@@ -62,7 +63,7 @@
             </fieldset>
 
             <fieldset class="form__block">
-              <legend class="form__legend">Объемб в ГБ:</legend>
+              <legend class="form__legend">{{propTitle}}:</legend>
               <ul class="sizes sizes--primery">
                 <li class="sizes__item" v-for="offer in product.offers" :key="offer.id">
                   <label class="sizes__label">
@@ -70,7 +71,8 @@
                     <span class="sizes__value" 
                           :class="{ active: params === offer.id }" 
                           @click="params = offer.id">
-                            {{ offer.propValues.map(item => {if(item.productProp.code !== 'color') return item.value})[0] }}
+                          {{ offer.propValues.map(item => item.value)[0] }}
+                            <!-- {{ offer.propValues.map(item => {if(item.productProp.code !== 'color') return item.value})[0] }} -->
                     </span>
                   </label>
                 </li>
@@ -195,7 +197,9 @@ export default {
       productAddSending: false,
 
       params: null,
-      totalPrice: null
+      totalPrice: null,
+
+      colorId: null,
     };
   },
   filters: {
@@ -209,7 +213,12 @@ export default {
       if(this.params) {
         return this.totalPrice = this.product.offers.find((item) => item.id === this.params).price
       } return this.product.price
-    }
+    },
+    propTitle(){
+      let propTitle = this.product.offers.find(item => item.propValues).propValues.find(item => item.productProp).productProp.title
+      // if(propTitle !=='Цвет') return propTitle
+      return propTitle
+    },
   },
   methods: {
     ...mapActions(['addProductToCart']),
@@ -224,9 +233,13 @@ export default {
       } else {
         this.productAdded = false;
         this.productAddSending = true;
-        this.addProductToCart({productId: this.product.id, amount: this.productAmount})
+        this.addProductToCart({productOfferId: this.params, colorId: this.colorId, amount: this.productAmount})
           .then(() => {
             this.productAdded = true;
+            this.productAddSending = false;
+          })
+          .catch(() => {
+            alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова передав все параметры')
             this.productAddSending = false;
           })
         }
