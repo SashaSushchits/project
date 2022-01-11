@@ -41,55 +41,35 @@
           <div class="cart__options">
             <h3 class="cart__title">Доставка</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item"  v-for="diliveri in diliveries" :key="diliveri.id">
                 <label class="options__label">
                   <input
                     class="options__radio sr-only"
                     type="radio"
                     name="delivery"
-                    value="0"
+                    v-model="diliveriId"
+                    :value = diliveri.id 
                     checked=""
                   />
                   <span class="options__value">
-                    Самовывоз <b>бесплатно</b>
+                    {{diliveri.title}} <b>{{diliveri.price}}</b>
                   </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input
-                    class="options__radio sr-only"
-                    type="radio"
-                    name="delivery"
-                    value="500"
-                  />
-                  <span class="options__value"> Курьером <b>500 ₽</b> </span>
                 </label>
               </li>
             </ul>
 
-            <h3 class="cart__title">Оплата</h3>
+            <h3 v-if="payments && payments.length !== 0" class="cart__title">Оплата</h3>
             <ul class="cart__options options">
-              <li class="options__item">
+              <li class="options__item" v-for="payment in payments" :key="payment.id">
                 <label class="options__label">
                   <input
                     class="options__radio sr-only"
                     type="radio"
                     name="pay"
-                    value="card"
+                    v-model="paymentId"
+                    :value = payment.id 
                   />
-                  <span class="options__value"> Картой при получении </span>
-                </label>
-              </li>
-              <li class="options__item">
-                <label class="options__label">
-                  <input
-                    class="options__radio sr-only"
-                    type="radio"
-                    name="pay"
-                    value="cash"
-                  />
-                  <span class="options__value"> Наличными при получении </span>
+                  <span class="options__value"> {{payment.title}} </span>
                 </label>
               </li>
             </ul>
@@ -99,16 +79,16 @@
         <div class="cart__block">
           <ul class="cart__orders">
             <li class="cart__order" v-for="product in products" :key="product.productId">
-              <h3>{{ product.product.title }}</h3>
+              <h3>{{ product.product.productOffer.title }}</h3>
               <b>{{ (product.amount * product.product.price) | numberFormat }} Br</b>
               <span>Количесвто: {{ product.amount }} шт.</span> <br>
-              <span>Артикул: {{ product.productId }}</span>
+              <span>Артикул: {{ product.product.productOffer.product.id }}</span>
             </li>
           </ul>
 
           <div class="cart__total" v-if="totalProducts">
-            <p>Доставка: <b>50 Br</b></p>
-            <p>Итого: <b>{{ totalProducts }}</b> товара на сумму <b>{{ (totalPrice + 50) | numberFormat}} Br</b></p>
+            <p>Доставка: <b>1200 Br</b></p>
+            <p>Итого: <b>{{ totalProducts }}</b> товара на сумму <b>{{ (totalPrice + 1200) | numberFormat}} Br</b></p>
           </div>
 
           <button class="cart__button button button--primery" type="submit">
@@ -150,6 +130,11 @@ export default {
             formError: {},
             formErrorMessage: '',
 
+            diliveries: [],
+            payments: [],
+            diliveriId:'',
+            paymentId:'',
+
             orderLoading: false,
         }
     },
@@ -163,9 +148,12 @@ export default {
 
           this.orderLoading = true;
 
-          this.orderLoadingTimer = setTimeout(() => {
+          if(this.diliveries.length !== 0 && this.paymentId) {
+            this.orderLoadingTimer = setTimeout(() => {
             axios.post(API_BASE_URL + '/api/orders', {
-              ...this.formData
+              ...this.formData,
+              deliveryTypeId: this.diliveriId,
+              paymentTypeId: this.paymentId
             }, {
              params: {userAccessKey: this.$store.state.userAccessKey}
             })
@@ -180,7 +168,28 @@ export default {
             })
             .then(() => this.orderLoading = false);
           }, 3000)
-        }
+          } else {
+            alert('dsfdsfdfds')
+            this.orderLoading = false
+          }
+          
+        },
+        loadDeliveries() {
+          axios.get(API_BASE_URL+'/api/deliveries')
+              .then(response => this.diliveries = response.data)
+        },
+        loadPayments() {
+          axios.get(API_BASE_URL+`/api/payments?deliveryTypeId=${this.diliveriId}`)
+              .then(response => this.payments = response.data)
+        },
+    },
+    created() {
+      this.loadDeliveries()
+    },
+    watch: {
+      diliveriId() {
+        this.loadPayments()
+      }
     }
 };
 </script>

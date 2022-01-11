@@ -78,8 +78,7 @@ export default {
       // ...mapActions({deleteProduct: 'deleteCartProduct'}),
       // ...mapMutations({deleteProduct: 'deleteCartProduct'}),
       deleteProduct(productId){
-        console.log(productId)
-          this.$store.dispatch('deleteCartProduct', {productId})
+        this.$store.dispatch('deleteCartProduct', {productId})
       }
   }
 };

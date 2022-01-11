@@ -239,7 +239,7 @@ export default {
             this.productAddSending = false;
           })
           .catch(() => {
-            alert('Что-то пошло не так, перезагрузите страницу и попробуйте снова передав все параметры')
+            alert('Что-то пошло не так, попробуйте снова передав все параметры')
             this.productAddSending = false;
           })
         }

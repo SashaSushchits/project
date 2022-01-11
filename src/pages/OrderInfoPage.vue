@@ -55,11 +55,11 @@
 
         <div class="cart__block">
           <ul class="cart__orders">
-            <li class="cart__order" v-for="product in order.basket.items" :key="product.product.id">
-              <h3>{{ product.product.title }}</h3>
+            <li class="cart__order" v-for="product in order.basket.items" :key="product.id">
+              <h3>{{ product.productOffer.title }}</h3>
               <b>{{ (product.quantity * product.price) | numberFormat }} Br</b>
               <span>Количесвто: {{ product.quantity }} шт.</span> <br>
-              <span>Артикул: {{ product.product.id }}</span>
+              <span>Артикул: {{ product.productOffer.product.id }}</span>
             </li>
           </ul>
 
