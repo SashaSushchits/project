@@ -34,7 +34,7 @@
         <BasePagination
           v-model="page"
           :count="countProducts"
-          :per-page="productsPerPage"
+          :per-page.sync="productsPerPage"
         />
       </section>
     </div>

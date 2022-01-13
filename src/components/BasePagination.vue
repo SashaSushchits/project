@@ -26,11 +26,24 @@
         </svg>
       </a>
     </li>
+    <fieldset class="form_block">
+      <label class="form__label form__label--select">
+        <select @click="submit()" class="form__select" type="text" name="category" v-model.number="currentPerPage">
+          <option :value="item.page" v-for="(item, index) in data" :key="index"> {{ item.page }}</option>
+        </select>
+      </label>
+    </fieldset>
   </ul>
 </template>
 
 <script>
 export default {
+  data(){
+    return{
+      data:[{page:4},{page:12},{page:24}],
+      currentPerPage: this.perPage
+    }
+  },
   model: {
     prop:'page',
     event:'paginate'
@@ -47,9 +60,18 @@ export default {
   methods: {
     paginate(page) {
       this.$emit('paginate', page)
+    },
+    submit(){
+      this.$emit('update:perPage', this.currentPerPage);
     }
   }
 }
 </script>
 
-// сделать нормальное переключение(условие на отключение кнопки переключения) и разобраться с model и двусторонним связыванием
+<style scoped>
+  .form_block {
+    border: 1;
+    padding: 0;
+    margin-left: 10px
+}
+</style>
