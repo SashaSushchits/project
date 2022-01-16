@@ -98,7 +98,7 @@ export default {
           filteredProducts = filteredProducts.filter(item => item.colors.find(item => item.color.id === this.filterColor[i]))
         }
       }
-      console.log(filteredProducts)
+     
       return filteredProducts;
       
     },
@@ -120,7 +120,7 @@ export default {
       clearTimeout(this.loadProductsTimer);
       this.loadProductsTimer = setTimeout(() => {
         if(this.productsPropsData.length !== 0 && this.propsCode) {
-          console.log(this.propsCode, this.productsPropsData.length)
+          
           let link = API_BASE_URL+`/api/products?page=${this.page}&limit=${this.productsPerPage}&categoryId=${this.filterCategoryId}`;
           let newLink = this.propsData.reduce((acc, el) => acc+`&props[${this.productsCode}][]=${el}`, link)
           axios

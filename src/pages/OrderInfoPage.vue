@@ -48,7 +48,7 @@
             </li>
             <li class="dictionary__item">
               <span class="dictionary__key"> Способ оплаты </span>
-              <span class="dictionary__value"> картой при получении </span>
+              <span class="dictionary__value"> {{order.paymentType}} </span>
             </li>
           </ul>
         </div>
@@ -64,8 +64,8 @@
           </ul>
 
           <div class="cart__total">
-            <p>Доставка: <b>50 Br</b></p>
-            <p>Итого: <b>{{ order.basket.items.length }}</b> товара на сумму <b>{{ (order.totalPrice + 50) | numberFormat}} Br</b></p>
+            <p>Доставка: <b>1200 Br</b></p>
+            <p>Итого: <b>{{ order.basket.items.length }}</b> товара на сумму <b>{{ (order.totalPrice + 1200) | numberFormat}} Br</b></p>
           </div>
         </div>
 

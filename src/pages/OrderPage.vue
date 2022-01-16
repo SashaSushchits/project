@@ -132,8 +132,8 @@ export default {
 
             diliveries: [],
             payments: [],
-            diliveriId:'',
-            paymentId:'',
+            diliveriId: '',
+            paymentId: 2,
 
             orderLoading: false,
         }
@@ -148,7 +148,7 @@ export default {
 
           this.orderLoading = true;
 
-          if(this.diliveries.length !== 0 && this.paymentId) {
+          if(this.diliveries.length !== 0 && this.paymentId && this.diliveriId) {
             this.orderLoadingTimer = setTimeout(() => {
             axios.post(API_BASE_URL + '/api/orders', {
               ...this.formData,
@@ -169,7 +169,7 @@ export default {
             .then(() => this.orderLoading = false);
           }, 3000)
           } else {
-            alert('dsfdsfdfds')
+            alert('Выберите вариант доставки')
             this.orderLoading = false
           }
           
