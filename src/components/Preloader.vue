@@ -22,7 +22,7 @@ export default {
 
 <style>
     .content {
-    padding: 15px;
+    padding: 10px;
     overflow: hidden;
     }
 

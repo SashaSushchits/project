@@ -167,7 +167,7 @@ export default {
                 this.formErrorMessage = error.response.data.error.message;
             })
             .then(() => this.orderLoading = false);
-          }, 3000)
+          }, 500)
           } else {
             alert('Выберите вариант доставки')
             this.orderLoading = false

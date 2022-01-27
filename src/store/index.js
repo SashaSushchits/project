@@ -118,7 +118,7 @@ export default new Vuex.Store({
                 })
                 .catch(() => context.state.cartProductsLoadingFailed = true)
                 .then(() => context.state.cartProductsLoading = false);
-            }, 3000)
+            }, 500)
         },
         addProductToCart(context, {productOfferId, colorId, amount}){
             return (new Promise(resolve => setTimeout(resolve, 2000)))

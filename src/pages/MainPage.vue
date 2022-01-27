@@ -133,7 +133,7 @@ export default {
           .then((response) => (this.productsData = response.data))
           .catch(() => this.productsLoadingFailed = true)
           .then(() => this.productsLoading = false);
-      }, 3000) 
+      }, 500) 
     },
   },
   created() {

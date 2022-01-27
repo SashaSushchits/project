@@ -18,9 +18,9 @@
     <section class="item">
       <div class="item__pics pics">
         <div class="pics__wrapper">
-          <img
-            width="570"
-            height="570"
+          <img class="img__product"
+            width="500"
+            height="500"
             :src="product.preview.file.url"
             :alt="product.title"
           />
